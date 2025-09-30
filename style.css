@@ -1,0 +1,139 @@
+/* Background */
+body {
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;   /* stack hotel name and signup box */
+  justify-content: center;
+  align-items: center;
+
+  background: url("best-hotel-views-in-the-world-1.jpg") no-repeat center center fixed;
+  background-size: cover;
+
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+/* Hotel name header */
+.hotel-name {
+  margin-top: 100px;   /* space above the hotel name */
+  margin-bottom: 50px; /* space below before the signup box */
+  text-align: center;
+}
+
+.hotel-name h1 {
+  color: black;
+  font-size: 60px;  /* increased size */
+  text-shadow: 3px 3px 10px rgba(0,0,0,0.6);
+  letter-spacing: 3px;
+  margin: 0;
+}
+
+
+
+/* Signup card */
+.signup-container {
+  background: rgba(255, 255, 255, 0.9); /* slight transparency */
+  padding: 40px 30px;
+  border-radius: 15px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+  width: 350px;
+  animation: fadeIn 1s ease-in-out;
+}
+
+
+.signup-container h2 {
+  text-align: center;
+  margin-bottom: 25px;
+  color: #222;
+  letter-spacing: 1px;
+}
+
+/* Inputs */
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  margin: 10px 0 5px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #444;
+}
+
+input {
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  transition: 0.3s;
+}
+
+input:focus {
+  border-color: #ff6b6b;
+  box-shadow: 0 0 8px rgba(255,107,107,0.4);
+  outline: none;
+}
+
+/* Button */
+button {
+  margin-top: 20px;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #ff6b6b, #f94d6a);
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  transform: scale(1.05);
+  background: linear-gradient(135deg, #f94d6a, #ff6b6b);
+}
+
+/* Login link */
+.login-link {
+  text-align: center;
+  margin-top: 15px;
+  font-size: 14px;
+}
+
+.login-link a {
+  color: #f94d6a;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.login-link a:hover {
+  text-decoration: underline;
+}
+
+/* Fade animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Input default look */
+input {
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  transition: all 0.3s ease;  /* smooth animation */
+}
+
+/* Hover effect */
+input:hover {
+  border-color: #f94d6a;
+  box-shadow: 0 0 6px rgba(249, 77, 106, 0.4);
+  transform: scale(1.03);   /* slight zoom effect */
+}
+
+/* Focus effect (already there, but polished) */
+input:focus {
+  border-color: #ff6b6b;
+  box-shadow: 0 0 10px rgba(255, 107, 107, 0.6);
+  outline: none;
+  transform: scale(1.07);
+}
