@@ -24,7 +24,7 @@
 
         <figcaption class="overlay">
           <div class="room-title">{{ room.RoomType }}</div>
-          <div class="room-sub">{{ room.Description if room.Description else '' }}</div>
+          <div class="room-sub">{{ room.Caption }}</div>
         </figcaption>
       </figure>
 
@@ -32,6 +32,8 @@
       <section class="room-details">
         <div class="meta">
           <div class="pill">{{ room.RoomType }} • {{ room.BedType }}</div>
+        </div>
+        <div class="meta">
           <div class="pill">Free Wi-Fi</div>
           <div class="pill">Breakfast included</div>
         </div>
@@ -66,9 +68,29 @@
               <div class="capacity"><span class="muted">Beds:</span> <b>{{ room.BedType }}</b></div>
               <div class="capacity"><span class="muted">Rate:</span> <b>₹{{ room.RatePerNight }}</b> / night</div>
             </div>
-            <button class="book-btn">Book Now</button>
+
           </div>
         </div>
+
+        <!-- FORM  -->
+        <form action="{{ url_for('book') }}" method="POST" class="booking-form">
+          <!-- Hidden input to pass the room_type_id to the backend -->
+          <input type="hidden" name="room_type_id" value="{{ room.RoomTypeID }}">
+          
+          <div class="date-inputs">
+            <div>
+              <label for="check_in">Check-in Date</label>
+              <input type="date" id="check_in" name="check_in" required>
+            </div>
+            <div>
+              <label for="check_out">Check-out Date</label>
+              <input type="date" id="check_out" name="check_out" required>
+            </div>
+          </div>
+
+          <button type="submit" class="book-btn">Confirm Booking</button>
+        </form>
+
       </section>
     </main>
   </div>

@@ -15,6 +15,8 @@ def createtables():
     CREATE TABLE RoomTypes (
         RoomTypeID INTEGER PRIMARY KEY AUTOINCREMENT,
         RoomType TEXT NOT NULL,
+        Caption Text,
+        Description Text,
         RatePerNight REAL NOT NULL,
         MaxOccupancy INTEGER,
         BedType TEXT,
@@ -71,10 +73,12 @@ def insertvalues():
     # Standard Room
     cursor.execute("""
     INSERT INTO RoomTypes 
-    (RoomType, RatePerNight, MaxOccupancy, BedType, SizeSqFt, Amenities, ImagePaths)
-    VALUES (?, ?, ?, ?, ?, ?, ?)
+    (RoomType, Caption, Description, RatePerNight, MaxOccupancy, BedType, SizeSqFt, Amenities, ImagePaths)
+    VALUES (?, ?, ?, ?, ?, ?, ?,?,?)
     """, (
         "Standard Room",
+        "A cozy and practical stay option with essential amenities for a comfortable visit.",
+        "The Standard Room offers all the essentials in a well-designed space. Perfect for short stays, featuring a double bed, functional furniture, and a clean, modern bathroom.",
         3500,                        # example price
         2,
         "Double Bed",
@@ -86,10 +90,12 @@ def insertvalues():
     # Deluxe Room
     cursor.execute("""
     INSERT INTO RoomTypes 
-    (RoomType, RatePerNight, MaxOccupancy, BedType, SizeSqFt, Amenities, ImagePaths)
-    VALUES (?, ?, ?, ?, ?, ?, ?)
+    (RoomType, Caption, Description, RatePerNight, MaxOccupancy, BedType, SizeSqFt, Amenities, ImagePaths)
+    VALUES (?, ?, ?, ?, ?, ?, ?,?,?)
     """, (
         "Deluxe Room",
+        "Stylish and spacious room designed for comfort with modern amenities and a relaxing view.",
+        "Our Deluxe Room offers refined comfort and smart design. Featuring a queen-size bed, cozy seating corner, and contemporary interiors — ideal for solo travelers, couples, or business stays.",
         5500,
         2,
         "Queen Bed",
@@ -101,10 +107,12 @@ def insertvalues():
     # Luxury Suite
     cursor.execute("""
     INSERT INTO RoomTypes 
-    (RoomType, RatePerNight, MaxOccupancy, BedType, SizeSqFt, Amenities, ImagePaths)
-    VALUES (?, ?, ?, ?, ?, ?, ?)
+    (RoomType, Caption, Description, RatePerNight, MaxOccupancy, BedType, SizeSqFt, Amenities, ImagePaths)
+    VALUES (?, ?, ?, ?, ?, ?, ?,?,?)
     """, (
         "Luxury Suite",
+        "Elegantly appointed suite with panoramic mountain views and private balcony.",
+        "Experience the peak of comfort in our Luxury Suite — expansive living area, plush king-sized bed, curated minibar, and a spa-like ensuite.",
         8500,
         2,
         "King Bed",
@@ -112,6 +120,13 @@ def insertvalues():
         "TV,Wi-Fi,Espresso machine,Bathtub,Room service",
         "luxury1.jpg,kinfbed1.jpg,hehe.jpg"
     ))
+
+    rooms_data = [
+        ('101', 1), ('102', 1), ('103', 1), # Three Standard Rooms
+        ('201', 2), ('202', 2),             # Two Deluxe Rooms
+        ('301', 3)                          # One Luxury Suite
+    ]
+    cursor.executemany("INSERT INTO Rooms (RoomNumber, RoomTypeID) VALUES (?, ?)", rooms_data)
 
     conn.commit()
 
@@ -123,10 +138,18 @@ def login(email,password):
     cursor.execute("SELECT * FROM Guests WHERE Email = ? AND Password = ?", (email, password))
     user = cursor.fetchone()
     conn.close()
+
+    conn = sqlite3.connect("hospital_management.db")
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM Guests WHERE Email = ? AND Password = ?", (email, password))
+    userdetails = cursor.fetchone()
+    conn.close()
+
     if user:
-        return 1
+        return userdetails,1
     else:
-        return 0
+        return userdetails,0
     
 def signup(username,email,password,phone):
     conn = sqlite3.connect("hospital_management.db")
@@ -135,6 +158,53 @@ def signup(username,email,password,phone):
     cursor.execute("INSERT INTO Guests (Name, Email,  Password, ContactNumber )VALUES (?,?,?,?);", (username,email,password,phone))
     conn.commit()
     conn.close()
+
+def book_room(guest_id, room_type_id, check_in, check_out):
+    """Handles the complete room booking logic."""
+    conn = sqlite3.connect("hospital_management.db")
+    cursor = conn.cursor()
+
+    # Find available rooms of the requested type
+    cursor.execute("""
+        SELECT R.RoomID FROM Rooms R
+        WHERE R.RoomTypeID = ? AND R.RoomID NOT IN (
+            SELECT B.RoomID FROM Bookings B
+            WHERE (B.CheckInDate < ? AND B.CheckOutDate > ?)
+        )
+    """, (room_type_id, check_out, check_in))
+    
+    available_room = cursor.fetchone()
+
+    if not available_room:
+        conn.close()
+        return "❌ No rooms of this type available for the given dates."
+
+    room_id_to_book = available_room[0]
+
+    # Insert booking
+    cursor.execute("""
+        INSERT INTO Bookings (GuestID, RoomID, CheckInDate, CheckOutDate)
+        VALUES (?, ?, ?, ?)
+    """, (guest_id, room_id_to_book, check_in, check_out))
+    booking_id = cursor.lastrowid
+
+    # Calculate total bill
+    cursor.execute("SELECT RatePerNight FROM RoomTypes WHERE RoomTypeID = ?", (room_type_id,))
+    rate = cursor.fetchone()[0]
+    cursor.execute("SELECT julianday(?) - julianday(?)", (check_out, check_in))
+    nights = int(cursor.fetchone()[0])
+    total_amount = rate * nights
+
+    # Insert billing record
+    cursor.execute("""
+        INSERT INTO Billings (BookingID, TotalAmount, PaymentStatus)
+        VALUES (?, ?, 'Pending')
+    """, (booking_id, total_amount))
+
+    conn.commit()
+    conn.close()
+    return f"✅ Booking Confirmed (Room {room_id_to_book}, Total ₹{total_amount})"
+
 
 if __name__ == "__main__":
     createtables()
