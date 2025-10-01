@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Mount n' Mist — Standard Room</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='rooms.css') }}" />
 </head>
 <body>
   <div class="container">
@@ -17,9 +17,9 @@
       <!-- Left: Photo Gallery -->
       <figure class="room-visual gallery">
         <div class="gallery-track">
-          <img src="new1.jpg" alt="Standard Room - Bed">
-          <img src="new2.jpg" alt="Standard Room - Desk Area">
-          <img src="newbath.jpg" alt="Standard Room - Window View">
+          <img src="{{ url_for('static', filename='images/new1.jpg') }}" alt="Standard Room - Bed">
+          <img src="{{ url_for('static', filename='images/new2.jpg') }}" alt="Standard Room - Desk Area">
+          <img src="{{ url_for('static', filename='images/newbath.jpg') }}" alt="Standard Room - Window View">
         </div>
 
         <figcaption class="overlay">

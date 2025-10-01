@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mount n' Mist — {{ room.RoomType }}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='rooms.css') }}" />
+</head>
+<body>
+  <div class="container">
+    <header class="site-header">
+      <div class="logo">Mount n' Mist</div>
+      <div class="tag">Luxury rooms & serene mountain views</div>
+    </header>
+
+    <main class="room-card" role="main">
+      <!-- Left: Photo Gallery -->
+      <figure class="room-visual gallery">
+        <div class="gallery-track">
+          {% for img in room.ImagePaths.split(',') %}
+            <img src="{{ url_for('static', filename='images/' ~ img) }}" alt="{{ room.RoomType }}">
+          {% endfor %}
+        </div>
+
+        <figcaption class="overlay">
+          <div class="room-title">{{ room.RoomType }}</div>
+          <div class="room-sub">{{ room.Description if room.Description else '' }}</div>
+        </figcaption>
+      </figure>
+
+      <!-- Right: Details -->
+      <section class="room-details">
+        <div class="meta">
+          <div class="pill">{{ room.RoomType }} • {{ room.BedType }}</div>
+          <div class="pill">Free Wi-Fi</div>
+          <div class="pill">Breakfast included</div>
+        </div>
+
+        <p class="desc">{{ room.Description if room.Description else 'A comfortable stay with all essential amenities.' }}</p>
+
+        <div>
+          <div class="muted">Room amenities</div>
+          <div class="amenities">
+            {% for amenity in room.Amenities.split(',') %}
+              <div class="amenity">
+                {% if "Wi-Fi" in amenity %}<div class="ico">📶</div>{% endif %}
+                {% if "Tea" in amenity or "Coffee" in amenity %}<div class="ico">☕</div>{% endif %}
+                {% if "TV" in amenity %}<div class="ico">TV</div>{% endif %}
+                {% if "Bath" in amenity %}<div class="ico">🛁</div>{% endif %}
+                {% if "Desk" in amenity %}<div class="ico">🛋️</div>{% endif %}
+                <small>{{ amenity }}</small>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="bottom-row">
+          <div class="space">
+            <div class="label">Space available</div>
+            <div class="val">+ {{ room.SizeSqFt }} sq ft</div>
+            <div class="muted">Max occupancy: <b>{{ room.MaxOccupancy }} adults</b></div>
+          </div>
+
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:10px">
+            <div class="card-footer">
+              <div class="capacity"><span class="muted">Beds:</span> <b>{{ room.BedType }}</b></div>
+              <div class="capacity"><span class="muted">Rate:</span> <b>₹{{ room.RatePerNight }}</b> / night</div>
+            </div>
+            <button class="book-btn">Book Now</button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
