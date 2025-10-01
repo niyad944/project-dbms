@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mount n' Mist</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='homepage.css') }}" />
 </head>
 <body>
 
@@ -15,7 +15,7 @@
       <a href="#">Home</a>
       <a href="#">Rooms</a>
       <a href="#">Attractions</a>
-      <a href="#">Contact</a>
+      <a href="#">Contact</a> 
     </nav>
   </header>
 
@@ -26,7 +26,7 @@
       <p>Luxury Stay • Prime Location • Comfort Redefined</p>
     </div>
     <div class="hero-img">
-      <img src="IMG-20251001-WA0096.jpg" alt="Hotel Image">
+      <img src="{{ url_for('static', filename='images/homepagetitle.jpg') }}" alt="Hotel Image">
     </div>
   </section>
 
@@ -35,19 +35,19 @@
     <h2>Choose Your Room</h2>
     <div class="room-grid">
       <div class="room-tile">
-        <img src="room1.jpg" alt="Luxury Suite">
+        <img src="{{ url_for('static', filename='images/luxuryhomepage.jpg') }}" alt="Luxury Suite">
         <h3>Luxury Suite</h3>
         <p>King bed • Sea view • Jacuzzi</p>
         <button>See More</button>
       </div>
       <div class="room-tile">
-        <img src="room2.jpg" alt="Deluxe Room">
+        <img src="{{ url_for('static', filename='images/deluxehomepage.jpg') }}" alt="Deluxe Room">
         <h3>Deluxe Room</h3>
         <p>Double bed • Free WiFi • Balcony</p>
         <button>See More</button>
       </div>
       <div class="room-tile">
-        <img src="room3.jpg" alt="Standard Room">
+        <img src="{{ url_for('static', filename='images/standeredhomepage.jpg') }}" alt="Standard Room">
         <h3>Standard Room</h3>
         <p>AC • TV • Breakfast included</p>
         <button>See More</button>
@@ -66,13 +66,13 @@
   </section>
 
   <!-- Gallery -->
-  <section class="gallery">
-    <h2>Gallery</h2>
+  <section class="Gallery">
+    <h2>PERKS</h2>
     <div class="gallery-grid">
-      <img src="photo1.jpg" alt="">
-      <img src="photo2.jpg" alt="">
-      <img src="photo3.jpg" alt="">
-      <img src="photo4.jpg" alt="">
+      <img src="{{ url_for('static', filename='images/roomser.jpg') }}" alt="">
+      <img src="{{ url_for('static', filename='images/surrf.jpg') }}" alt="">
+      <img src="{{ url_for('static', filename='images/waterpark.jpg') }}" alt="">
+      <img src="{{ url_for('static', filename='images/wifi.jpg') }}" alt="">
     </div>
   </section>
 

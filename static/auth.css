@@ -1,0 +1,137 @@
+/* static/auth.css */
+
+body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: white;
+}
+
+#page-background {
+    background: url("images/mount2.jpg") no-repeat center center fixed;
+    background-size: cover;
+}
+
+/* Hotel name header */
+.hotel-name {
+    font-size: 110px;
+    margin-bottom: -12px;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(-200px);
+    animation: slideFromtop 1.5s ease-out forwards;
+}
+
+.sub_heading {
+    font-size: 22px;
+    text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.6);
+    letter-spacing: 3px;
+    margin-top: -10px;
+    padding-bottom: 60px;
+    opacity: 0;
+    transform: translate(-100px);
+    animation: slideDown 1.5s ease-out forwards .5s;
+}
+
+/* Auth form container */
+.signup-container {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 40px 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    width: 350px;
+    animation: fadeIn 1s ease-in-out;
+    color: #222;
+}
+
+.signup-container h2,
+.signup-container h3 {
+    text-align: center;
+    margin-bottom: 25px;
+    letter-spacing: 1px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    margin: 10px 0 5px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #444;
+}
+
+input {
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+input:focus {
+    border-color: #ff6b6b;
+    box-shadow: 0 0 10px rgba(255, 107, 107, 0.6);
+    outline: none;
+    transform: scale(1.05);
+}
+
+button {
+    margin-top: 20px;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #ff6b6b, #f94d6a);
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    transform: scale(1.05);
+}
+
+.login-link {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+.login-link a {
+    color: #f94d6a;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* Animations */
+@keyframes slideFromtop {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideDown {
+    to {
+        opacity: 1;
+        transform: translate(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

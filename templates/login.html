@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hotel Login</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='auth.css') }}" />
 </head>
 <body id="page-background">
   <!-- Hotel name -->
@@ -17,7 +17,7 @@
   <!-- Login form -->
   <div class="signup-container">
     <h3>Login to Your Account</h3>
-    <form >
+    <form action="/" method="POST">
       <label for="email">Email</label>
       <input type="email" name="email" id="email" placeholder="Enter email" required>
 

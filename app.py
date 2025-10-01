@@ -16,6 +16,7 @@ def login():
         status=dbloginfuncton(email,password)
         if status==1:
             print("Login Successfull")
+            return redirect(url_for("homepage"))
         else:
             print("Invalid Credentials")
     return render_template("login.html")
@@ -35,6 +36,9 @@ def signup():
         redirect(url_for("login"))
     return render_template("signup.html")
 
+@app.route("/homepage",methods=["GET", "POST"])
+def homepage():
+    return render_template("homepage.html")
 
 if __name__=="__main__":
     app.run(debug=True)

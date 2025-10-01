@@ -1,0 +1,127 @@
+/* static/components.css */
+
+/* Base reset for component pages */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+html,
+body {
+    height: 100%;
+    background: linear-gradient(180deg, #f6f7fb 0%, #ffffff 100%);
+    color: #111;
+}
+
+/* Page container */
+.container {
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 28px;
+}
+
+/* Header */
+.site-header {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.site-header .logo {
+    font-weight: 800;
+    font-size: 28px;
+    letter-spacing: 0.4px;
+    color: #0b1221;
+}
+
+.site-header .tag {
+    font-size: 13px;
+    color: #6b7280;
+}
+
+/* Room Card */
+.room-card {
+    margin-top: 26px;
+    background: white;
+    border-radius: 18px;
+    box-shadow: 0 12px 30px rgba(9, 18, 30, 0.06);
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 1fr 420px;
+    gap: 0;
+}
+
+.room-visual {
+    position: relative;
+    min-height: 360px;
+}
+
+.room-visual img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.room-details {
+    padding: 28px 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.desc {
+    color: #374151;
+    line-height: 1.5;
+    font-size: 15px;
+}
+
+/* Amenities grid */
+.amenities {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-top: 8px;
+}
+
+.amenity {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    background: #fff;
+    border: 1px solid #eef2f7;
+}
+
+.amenity small {
+    display: block;
+    font-size: 13px;
+    color: #374151;
+}
+
+.book-btn {
+    background: linear-gradient(90deg, #0b7df2, #0847d9);
+    border: none;
+    color: white;
+    padding: 12px 18px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 15px;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(11, 71, 217, 0.18);
+    transition: transform .14s ease, box-shadow .14s ease;
+}
+
+.book-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 18px 36px rgba(11, 71, 217, 0.16);
+}
+
+@media (max-width:900px) {
+    .room-card {
+        grid-template-columns: 1fr;
+    }
+}
