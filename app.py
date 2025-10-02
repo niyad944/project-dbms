@@ -1,5 +1,5 @@
 from flask import Flask, request, render_template,redirect, url_for,session
-from database import signup as dbsignupfunction, login as dbloginfuncton, book_room 
+from database import signup as dbsignupfunction, login as dbloginfuncton, book_room, update_bill_to_paid, get_pending_booking_details,cancel_pending_booking
 import sqlite3
 
 
@@ -69,16 +69,42 @@ def book():
     print("check_in: ",check_in)
     print("check_out:",check_out)
     
-    # Get the logged-in guest's ID from the session
     guest_id = session['user_id']
-    
-    message = book_room(guest_id, room_type_id, check_in, check_out)
-    
-    # Flash the result message to the user
+    message,billing_id  = book_room(guest_id, room_type_id, check_in, check_out)
     print(message)
+    if billing_id:
+        return redirect(url_for('payment_page', billing_id=billing_id))
+    else:
+        return redirect(url_for('room_page', room_type_id=room_type_id))
+    
     return redirect(url_for('room_page', room_id=room_type_id))
 
+@app.route('/payment/<int:billing_id>')
+def payment_page(billing_id):
+    details = get_pending_booking_details(billing_id)
+    
+    if not details:
+        print("Booking not found or already processed.")
+        return redirect(url_for('homepage'))
+        
+    return render_template('payment.html', details=details)
 
+
+@app.route('/process_payment', methods=['POST'])
+def process_payment():
+    billing_id = request.form.get('billing_id')
+    message = update_bill_to_paid(billing_id)
+    print(message)
+    return redirect(url_for('homepage'))
+
+
+@app.route('/cancel_payment', methods=['POST'])
+def cancel_payment():
+    booking_id = request.form.get('booking_id')
+    message = cancel_pending_booking(booking_id)
+
+    print(message)
+    return redirect(url_for('homepage'))
 
 if __name__=="__main__":
     app.run(debug=True)
