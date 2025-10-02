@@ -1,12 +1,7 @@
 import sqlite3
-import os
-
-DATA_DIR = os.environ.get('ONRENDER_DISK_PATH', '.')
-DB_FILE = os.path.join(DATA_DIR, "DB_FILE.db")
-
 
 def createtables():
-    conn = sqlite3.connect("DB_FILE.db")
+    conn = sqlite3.connect("hotel_management.db")
     cursor = conn.cursor()
     cursor.execute("""CREATE TABLE Guests (
         GuestID INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -72,7 +67,7 @@ def createtables():
 
 def insertvalues():
 
-    conn = sqlite3.connect("DB_FILE.db")
+    conn = sqlite3.connect("hotel_management.db")
     cursor = conn.cursor()
     # Standard Room
     cursor.execute("""
@@ -136,14 +131,14 @@ def insertvalues():
 
 
 def login(email,password):
-    conn = sqlite3.connect("DB_FILE.db")
+    conn = sqlite3.connect("hotel_management.db")
     cursor = conn.cursor()
 
     cursor.execute("SELECT * FROM Guests WHERE Email = ? AND Password = ?", (email, password))
     user = cursor.fetchone()
     conn.close()
 
-    conn = sqlite3.connect("DB_FILE.db")
+    conn = sqlite3.connect("hotel_management.db")
     conn.row_factory = sqlite3.Row
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM Guests WHERE Email = ? AND Password = ?", (email, password))
@@ -156,7 +151,7 @@ def login(email,password):
         return userdetails,0
     
 def signup(username,email,password,phone):
-    conn = sqlite3.connect("DB_FILE.db")
+    conn = sqlite3.connect("hotel_management.db")
     cursor = conn.cursor()
 
     cursor.execute("INSERT INTO Guests (Name, Email,  Password, ContactNumber )VALUES (?,?,?,?);", (username,email,password,phone))
@@ -165,7 +160,7 @@ def signup(username,email,password,phone):
 
 def book_room(guest_id, room_type_id, check_in, check_out):
     """Handles the complete room booking logic."""
-    conn = sqlite3.connect("DB_FILE.db")
+    conn = sqlite3.connect("hotel_management.db")
     cursor = conn.cursor()
 
     # Find available rooms of the requested type
@@ -212,7 +207,7 @@ def book_room(guest_id, room_type_id, check_in, check_out):
 
 def get_room_details(room_type_id):
     """Fetches details for a specific room type."""
-    conn = sqlite3.connect("DB_FILE.db")
+    conn = sqlite3.connect("hotel_management.db")
     conn.row_factory = sqlite3.Row
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM RoomTypes WHERE RoomTypeID=?", (room_type_id,))
@@ -223,7 +218,7 @@ def get_room_details(room_type_id):
 # --- ✨ NEW FUNCTION #1: Gathers data for an existing pending booking ✨ ---
 def get_pending_booking_details(billing_id):
     """Fetches all details for a specific pending bill to display on the payment page."""
-    conn = sqlite3.connect("DB_FILE.db")
+    conn = sqlite3.connect("hotel_management.db")
     conn.row_factory = sqlite3.Row
     cursor = conn.cursor()
     
@@ -247,7 +242,7 @@ def get_pending_booking_details(billing_id):
         return None
 
     # Calculate nights to display on the summary page
-    conn = sqlite3.connect("DB_FILE.db")
+    conn = sqlite3.connect("hotel_management.db")
     cursor = conn.cursor()
     cursor.execute("SELECT julianday(?) - julianday(?)", (details['CheckOutDate'], details['CheckInDate']))
     nights = int(cursor.fetchone()[0])
@@ -266,7 +261,7 @@ def get_pending_booking_details(billing_id):
 # --- ✨ NEW FUNCTION #2: Updates a bill's status to 'Paid' ✨ ---
 def update_bill_to_paid(billing_id):
     """Updates a bill's status from 'Pending' to 'Paid'."""
-    conn = sqlite3.connect("DB_FILE.db")
+    conn = sqlite3.connect("hotel_management.db")
     cursor = conn.cursor()
     cursor.execute("UPDATE Billings SET PaymentStatus = 'Paid' WHERE BillingID = ?", (billing_id,))
     conn.commit()
@@ -276,7 +271,7 @@ def update_bill_to_paid(billing_id):
 # --- ✨ NEW FUNCTION #3: Deletes a pending booking ✨ ---
 def cancel_pending_booking(booking_id):
     """Deletes a booking. The CASCADE rule will also delete the associated bill."""
-    conn = sqlite3.connect("DB_FILE.db")
+    conn = sqlite3.connect("hotel_management.db")
     cursor = conn.cursor()
     cursor.execute("DELETE FROM Bookings WHERE BookingID = ?", (booking_id,))
     conn.commit()
@@ -288,7 +283,7 @@ def get_booking_history_for_guest(guest_id):
     Fetches a detailed list of all bookings for a specific guest,
     joining with Billings and RoomTypes to get all necessary info.
     """
-    conn = sqlite3.connect("DB_FILE.db")
+    conn = sqlite3.connect("hotel_management.db")
     conn.row_factory = sqlite3.Row
     cursor = conn.cursor()
     
@@ -296,9 +291,11 @@ def get_booking_history_for_guest(guest_id):
     cursor.execute("""
         SELECT
             RT.RoomType,
+            R.RoomNumber,
             B.CheckInDate,
             B.CheckOutDate,
-            BL.PaymentStatus
+            BL.PaymentStatus,
+            B.BookingID
         FROM Bookings AS B
         JOIN Billings AS BL ON B.BookingID = BL.BookingID
         JOIN Rooms AS R ON B.RoomID = R.RoomID
@@ -310,6 +307,31 @@ def get_booking_history_for_guest(guest_id):
     bookings = cursor.fetchall()
     conn.close()
     return bookings
+
+def cancel_booking_by_guest(booking_id, guest_id):
+    """
+    Securely deletes a booking by ensuring it belongs to the logged-in guest.
+    The CASCADE rule will automatically delete the associated bill.
+    """
+    conn = sqlite3.connect("hotel_management.db")
+    cursor = conn.cursor()
+    
+    # The WHERE clause checks both IDs for security
+    cursor.execute("""
+        DELETE FROM Bookings
+        WHERE BookingID = ? AND GuestID = ?
+    """, (booking_id, guest_id))
+    
+    # We can check if a row was actually deleted
+    rows_deleted = cursor.rowcount
+    
+    conn.commit()
+    conn.close()
+    
+    if rows_deleted > 0:
+        return "Your booking has been successfully cancelled."
+    else:
+        return "Error: Booking could not be cancelled."
 
 
 if __name__ == "__main__":

@@ -16,10 +16,10 @@
       <a href="#rooms">Rooms</a>
       <a href="#history">History</a>
       <a href="#attraction">Attractions</a>
-      <a href="{{ url_for('login') }}" class="logout-btn"><strong>Logout<strong></a>
+      <a href="{{ url_for('login') }}" class="logout-btn" onclick="return confirm('Are you sure you want to Logout?');"><strong>Logout<strong></a>
     </nav>
   </header>
-  
+
   <section class="hero" id="home">
     <div class="hero-content">
       <h1>Welcome to Mount n' Mist</h1>
@@ -54,22 +54,25 @@
     </div>
   </section>
 
-  <section class="booking-history" id="history">
+<section class="booking-history" id="history">
     <h2 class="history-heading">Your Booking History</h2>
     {% if bookings %}
       <table class="booking-history-table">
         <thead>
           <tr>
             <th>Room Type</th>
+            <th>Room Number</th>
             <th>Check-in</th>
             <th>Check-out</th>
             <th>Status</th>
+            <th>Action</th> <!-- ✨ NEW: Action column header -->
           </tr>
         </thead>
         <tbody>
           {% for booking in bookings %}
           <tr>
             <td>{{ booking.RoomType }}</td>
+            <td>{{ booking.RoomNumber }}</td>
             <td>{{ booking.CheckInDate }}</td>
             <td>{{ booking.CheckOutDate }}</td>
             <td>
@@ -79,12 +82,19 @@
                 <span class="status status-pending">Pending</span>
               {% endif %}
             </td>
+            <!-- ✨ NEW: Action column with Cancel button form ✨ -->
+            <td>
+              <form action="{{ url_for('cancel_booking') }}" method="POST" onsubmit="return confirm('Are you sure you want to cancel this booking? This action cannot be undone.');">
+                <input type="hidden" name="booking_id" value="{{ booking.BookingID }}">
+                <button type="submit" class="cancel-btn">Cancel</button>
+              </form>
+            </td>
           </tr>
           {% endfor %}
         </tbody>
       </table>
     {% else %}
-      <p class="no-bookings">You have no booking history yet. Why not book a stay?</p>
+      <p class="no-bookings">You have no booking history yet.</p>
     {% endif %}
   </section>
 
@@ -146,7 +156,9 @@
   </section>
   
   <footer>
+    <p>Contact us: mountnmist@gmail.com</p>
     <p>© 2025 Mount n' Mist. All Rights Reserved.</p>
+    
   </footer>
 
 </body>

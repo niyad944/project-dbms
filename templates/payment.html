@@ -46,7 +46,7 @@
     <!-- ✨ ACTION FORMS ✨ -->
     <div class="flex flex-col gap-4">
       <!-- Form for Paying the Bill -->
-      <form action="{{ url_for('process_payment') }}" method="POST">
+      <form action="{{ url_for('process_payment') }}" method="POST" onsubmit="return confirm('By confirmin, you accept to pay the amount? This action cannot be undone.');">
         <input type="hidden" name="billing_id" value="{{ details.billing_id }}">
         <button type="submit" class="w-full bg-green-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-green-700 transition duration-300">
           Confirm & Pay
@@ -54,7 +54,7 @@
       </form>
 
       <!-- Form for Cancelling the Booking -->
-      <form action="{{ url_for('cancel_payment') }}" method="POST">
+      <form action="{{ url_for('cancel_payment') }}" method="POST" onsubmit="return confirm('Are you sure you want to cancel the payment? This action cannot be undone.');">
         <input type="hidden" name="booking_id" value="{{ details.booking_id }}">
         <button type="submit" class="w-full text-center bg-gray-200 text-gray-800 font-bold py-3 px-4 rounded-lg hover:bg-gray-300 transition duration-300">
           Cancel

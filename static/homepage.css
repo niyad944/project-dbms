@@ -129,3 +129,19 @@
         text-align: center;
         font-size: 36px;
     }
+
+    .cancel-btn {
+            background-color: #fee2e2; /* Light red */
+            color: #b91c1c; /* Dark red */
+            border: none;
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: background-color 0.2s, color 0.2s;
+        }
+        .cancel-btn:hover {
+            background-color: #ef4444; /* Brighter red on hover */
+            color: white;
+        }

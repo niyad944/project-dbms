@@ -1,10 +1,8 @@
-from flask import Flask, request, render_template,redirect, url_for,session,flash
-from database import signup as dbsignupfunction, login as dbloginfuncton, book_room, update_bill_to_paid, get_pending_booking_details,cancel_pending_booking,get_booking_history_for_guest
+from flask import Flask, request, render_template,redirect, url_for,session
+from database import signup as dbsignupfunction, login as dbloginfuncton, book_room, update_bill_to_paid, get_pending_booking_details,cancel_pending_booking,get_booking_history_for_guest,cancel_booking_by_guest
 import sqlite3
-import os
 
-DATA_DIR = os.environ.get('ONRENDER_DISK_PATH', '.')
-DB_FILE = os.path.join(DATA_DIR, "DB_FILE.db")
+
 
 app=Flask(__name__)
 app.secret_key = '0f1e8a9d7c6b5a3e4f2a1b9c8d7e6f5a' 
@@ -48,7 +46,7 @@ def signup():
 def homepage():
     useremail=session.get("useremail")
 
-    conn = sqlite3.connect("DB_FILE.db")
+    conn = sqlite3.connect("hotel_management.db")
     cursor = conn.cursor()
     cursor.execute("SELECT Name FROM Guests WHERE Email = ?", (useremail,))
     
@@ -61,6 +59,7 @@ def homepage():
     guestid = cursor.fetchone()
     for i in guestid:
         guestid=i
+    session['user_id'] = guestid
     booking_history = get_booking_history_for_guest(guestid)
     
     return render_template("homepage.html", username=username, bookings=booking_history)
@@ -70,7 +69,7 @@ def homepage():
 
 @app.route("/room/<int:room_id>")
 def room_page(room_id):
-    conn = sqlite3.connect("DB_FILE.db")
+    conn = sqlite3.connect("hotel_management.db")
     conn.row_factory = sqlite3.Row
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM RoomTypes WHERE RoomTypeID=?", (room_id,))
@@ -127,9 +126,19 @@ def cancel_payment():
     print(message)
     return redirect(url_for('homepage'))
 
-if __name__ == '__main__':
-    app.run(debug=False, host='0.0.0.0', port=10000)
+@app.route('/cancel_booking', methods=['POST'])
+def cancel_booking():
+    """Handles cancellation requests from the user's booking history."""
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
 
+    booking_id_to_cancel = request.form.get('booking_id')
+    guest_id = session['user_id']
+    
+    # Call the new, secure database function
+    message = cancel_booking_by_guest(booking_id_to_cancel, guest_id)
+    print(message)
+    return redirect(url_for('homepage'))
 
-'''if __name__=="__main__":
-    app.run(debug=True)'''
+if __name__=="__main__":
+    app.run(debug=True)
