@@ -1,7 +1,7 @@
 import sqlite3
 
 def createtables():
-    conn = sqlite3.connect("hospital_management.db")
+    conn = sqlite3.connect("hotel_management.db")
     cursor = conn.cursor()
     cursor.execute("""CREATE TABLE Guests (
         GuestID INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -67,7 +67,7 @@ def createtables():
 
 def insertvalues():
 
-    conn = sqlite3.connect("hospital_management.db")
+    conn = sqlite3.connect("hotel_management.db")
     cursor = conn.cursor()
     # Standard Room
     cursor.execute("""
@@ -131,14 +131,14 @@ def insertvalues():
 
 
 def login(email,password):
-    conn = sqlite3.connect("hospital_management.db")
+    conn = sqlite3.connect("hotel_management.db")
     cursor = conn.cursor()
 
     cursor.execute("SELECT * FROM Guests WHERE Email = ? AND Password = ?", (email, password))
     user = cursor.fetchone()
     conn.close()
 
-    conn = sqlite3.connect("hospital_management.db")
+    conn = sqlite3.connect("hotel_management.db")
     conn.row_factory = sqlite3.Row
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM Guests WHERE Email = ? AND Password = ?", (email, password))
@@ -151,7 +151,7 @@ def login(email,password):
         return userdetails,0
     
 def signup(username,email,password,phone):
-    conn = sqlite3.connect("hospital_management.db")
+    conn = sqlite3.connect("hotel_management.db")
     cursor = conn.cursor()
 
     cursor.execute("INSERT INTO Guests (Name, Email,  Password, ContactNumber )VALUES (?,?,?,?);", (username,email,password,phone))
@@ -160,7 +160,7 @@ def signup(username,email,password,phone):
 
 def book_room(guest_id, room_type_id, check_in, check_out):
     """Handles the complete room booking logic."""
-    conn = sqlite3.connect("hospital_management.db")
+    conn = sqlite3.connect("hotel_management.db")
     cursor = conn.cursor()
 
     # Find available rooms of the requested type
@@ -207,7 +207,7 @@ def book_room(guest_id, room_type_id, check_in, check_out):
 
 def get_room_details(room_type_id):
     """Fetches details for a specific room type."""
-    conn = sqlite3.connect("hospital_management.db")
+    conn = sqlite3.connect("hotel_management.db")
     conn.row_factory = sqlite3.Row
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM RoomTypes WHERE RoomTypeID=?", (room_type_id,))
@@ -218,7 +218,7 @@ def get_room_details(room_type_id):
 # --- ✨ NEW FUNCTION #1: Gathers data for an existing pending booking ✨ ---
 def get_pending_booking_details(billing_id):
     """Fetches all details for a specific pending bill to display on the payment page."""
-    conn = sqlite3.connect("hospital_management.db")
+    conn = sqlite3.connect("hotel_management.db")
     conn.row_factory = sqlite3.Row
     cursor = conn.cursor()
     
@@ -242,7 +242,7 @@ def get_pending_booking_details(billing_id):
         return None
 
     # Calculate nights to display on the summary page
-    conn = sqlite3.connect("hospital_management.db")
+    conn = sqlite3.connect("hotel_management.db")
     cursor = conn.cursor()
     cursor.execute("SELECT julianday(?) - julianday(?)", (details['CheckOutDate'], details['CheckInDate']))
     nights = int(cursor.fetchone()[0])
@@ -261,7 +261,7 @@ def get_pending_booking_details(billing_id):
 # --- ✨ NEW FUNCTION #2: Updates a bill's status to 'Paid' ✨ ---
 def update_bill_to_paid(billing_id):
     """Updates a bill's status from 'Pending' to 'Paid'."""
-    conn = sqlite3.connect("hospital_management.db")
+    conn = sqlite3.connect("hotel_management.db")
     cursor = conn.cursor()
     cursor.execute("UPDATE Billings SET PaymentStatus = 'Paid' WHERE BillingID = ?", (billing_id,))
     conn.commit()
@@ -271,7 +271,7 @@ def update_bill_to_paid(billing_id):
 # --- ✨ NEW FUNCTION #3: Deletes a pending booking ✨ ---
 def cancel_pending_booking(booking_id):
     """Deletes a booking. The CASCADE rule will also delete the associated bill."""
-    conn = sqlite3.connect("hospital_management.db")
+    conn = sqlite3.connect("hotel_management.db")
     cursor = conn.cursor()
     cursor.execute("DELETE FROM Bookings WHERE BookingID = ?", (booking_id,))
     conn.commit()

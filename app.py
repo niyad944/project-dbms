@@ -49,7 +49,7 @@ def homepage():
 
 @app.route("/room/<int:room_id>")
 def room_page(room_id):
-    conn = sqlite3.connect("hospital_management.db")
+    conn = sqlite3.connect("hotel_management.db")
     conn.row_factory = sqlite3.Row
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM RoomTypes WHERE RoomTypeID=?", (room_id,))
