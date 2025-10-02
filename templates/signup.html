@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hotel Sign Up</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='auth.css') }}" />
+</head>
+<body id="page-background">
+  <!-- Hotel name on top -->
+  <h1 class="hotel-name">Mount n' Mist</h1>
+    <h2 class="sub_heading">"where every stay feels like home" </h2>
+
+
+  <div class="signup-container">
+    <h2>Create Account</h2>
+    <form action="/signup" method="POST">
+      <label for="username">Username</label>
+      <input type="text" name="username" id="username" placeholder="Enter Username" required>
+
+      <label for="email">Email</label>
+      <input type="email" name="email" id="email" placeholder="Enter Email" required>
+      <label for="password">Password</label>
+      <input type="password" name="password" id="password" placeholder="Enter Password" required>
+
+      <label for="contact details">contact details</label>
+      <input type="number" name="phone" id="contact details" placeholder="Enter Contact Details" required>
+
+
+
+      <button type="submit">Sign Up</button>
+    </form>
+    <p class="login-link">Already have an account? <a href="{{ url_for('login') }}">Log in</a></p>
+  </div>
+</body>
+</html>
