@@ -1,5 +1,5 @@
-from flask import Flask, request, render_template,redirect, url_for,session
-from database import signup as dbsignupfunction, login as dbloginfuncton, book_room, update_bill_to_paid, get_pending_booking_details,cancel_pending_booking
+from flask import Flask, request, render_template,redirect, url_for,session,flash
+from database import signup as dbsignupfunction, login as dbloginfuncton, book_room, update_bill_to_paid, get_pending_booking_details,cancel_pending_booking,get_booking_history_for_guest
 import sqlite3
 
 
@@ -20,8 +20,7 @@ def login():
         user,status=dbloginfuncton(email,password)
         if status==1:
             print("Login Successfull")
-            session['user_id'] = user['GuestID']
-            session['user_name'] = user['Name']
+            session['useremail'] = email
             return redirect(url_for("homepage"))
         else:
             print("Invalid Credentials")
@@ -45,7 +44,27 @@ def signup():
 
 @app.route("/homepage")
 def homepage():
-    return render_template("homepage.html")
+    useremail=session.get("useremail")
+
+    conn = sqlite3.connect("hotel_management.db")
+    cursor = conn.cursor()
+    cursor.execute("SELECT Name FROM Guests WHERE Email = ?", (useremail,))
+    
+    # fetchone() gets the first result
+    username = cursor.fetchone()
+    for i in username:
+        username=i
+
+    cursor.execute("SELECT GuestID FROM Guests WHERE Email = ?", (useremail,))
+    guestid = cursor.fetchone()
+    for i in guestid:
+        guestid=i
+    booking_history = get_booking_history_for_guest(guestid)
+    
+    return render_template("homepage.html", username=username, bookings=booking_history)
+    
+    conn.close()
+    return render_template("homepage.html",username=username)
 
 @app.route("/room/<int:room_id>")
 def room_page(room_id):
@@ -72,11 +91,11 @@ def book():
     guest_id = session['user_id']
     message,billing_id  = book_room(guest_id, room_type_id, check_in, check_out)
     print(message)
-    if billing_id:
+    if billing_id!=-1:
         return redirect(url_for('payment_page', billing_id=billing_id))
     else:
-        return redirect(url_for('room_page', room_type_id=room_type_id))
-    
+        return redirect(url_for('room_page', room_id=room_type_id))
+
     return redirect(url_for('room_page', room_id=room_type_id))
 
 @app.route('/payment/<int:billing_id>')

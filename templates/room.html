@@ -63,7 +63,7 @@
             <div class="muted">Max occupancy: <b>{{ room.MaxOccupancy }} adults</b></div>
           </div>
 
-          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:10px">
+          <div class="bed-rate">
             <div class="card-footer">
               <div class="capacity"><span class="muted">Beds:</span> <b>{{ room.BedType }}</b></div>
               <div class="capacity"><span class="muted">Rate:</span> <b>₹{{ room.RatePerNight }}</b> / night</div>
@@ -73,6 +73,12 @@
         </div>
 
         <!-- FORM  -->
+
+        
+      </section>
+      
+    </main>
+    <div >
         <form action="{{ url_for('book') }}" method="POST" class="booking-form">
           <!-- Hidden input to pass the room_type_id to the backend -->
           <input type="hidden" name="room_type_id" value="{{ room.RoomTypeID }}">
@@ -90,9 +96,8 @@
 
           <button type="submit" class="book-btn">Confirm Booking</button>
         </form>
-
-      </section>
-    </main>
+      </div>
   </div>
+  
 </body>
 </html>

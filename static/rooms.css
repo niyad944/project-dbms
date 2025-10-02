@@ -167,11 +167,18 @@ body {
 
 /* Space + booking row */
 .bottom-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  width: 350px;
+
   margin-top: 10px;
   gap: 20px;
+}
+
+.bed-rate{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  margin-left: 17px;
+  transform: scale(1.1);
 }
 
 .space {

@@ -5,22 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mount n' Mist</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='homepage.css') }}" />
+
 </head>
 <body>
 
-  <!-- Header -->
   <header class="header">
-    <div class="logo">Mount n' Mist</div>
+    <div class="logo"> Hi {{ username }} </div>
     <nav class="nav">
-      <a href="#">Home</a>
-      <a href="#">Rooms</a>
-      <a href="#">Attractions</a>
-      <a href="#">Contact</a> 
+      <a href="#home">Home</a>
+      <a href="#rooms">Rooms</a>
+      <a href="#history">History</a>
+      <a href="#attraction">Attractions</a>
+      <a href="{{ url_for('login') }}" class="logout-btn"><strong>Logout<strong></a>
     </nav>
   </header>
-
-  <!-- Hero Section -->
-  <section class="hero">
+  
+  <section class="hero" id="home">
     <div class="hero-content">
       <h1>Welcome to Mount n' Mist</h1>
       <p>Luxury Stay • Prime Location • Comfort Redefined</p>
@@ -30,8 +30,7 @@
     </div>
   </section>
 
-  <!-- Rooms -->
-  <section class="rooms">
+  <section class="rooms" id="rooms">
     <h2>Choose Your Room</h2>
     <div class="room-grid">
       <div class="room-tile">
@@ -55,31 +54,101 @@
     </div>
   </section>
 
-  <!-- Attractions -->
-  <section class="attractions">
-    <h2>Nearby Attractions</h2>
-    <ul>
-      <li>Beach Walkway – 1 km</li>
-      <li>City Museum – 2 km</li>
-      <li>Shopping Plaza – 500 m</li>
-    </ul>
+  <section class="booking-history" id="history">
+    <h2 class="history-heading">Your Booking History</h2>
+    {% if bookings %}
+      <table class="booking-history-table">
+        <thead>
+          <tr>
+            <th>Room Type</th>
+            <th>Check-in</th>
+            <th>Check-out</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for booking in bookings %}
+          <tr>
+            <td>{{ booking.RoomType }}</td>
+            <td>{{ booking.CheckInDate }}</td>
+            <td>{{ booking.CheckOutDate }}</td>
+            <td>
+              {% if booking.PaymentStatus == 'Paid' %}
+                <span class="status status-paid">Paid</span>
+              {% else %}
+                <span class="status status-pending">Pending</span>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p class="no-bookings">You have no booking history yet. Why not book a stay?</p>
+    {% endif %}
   </section>
 
-  <!-- Gallery -->
-  <section class="Gallery">
-    <h2>PERKS</h2>
-    <div class="gallery-grid">
-      <img src="{{ url_for('static', filename='images/roomser.jpg') }}" alt="">
-      <img src="{{ url_for('static', filename='images/surrf.jpg') }}" alt="">
-      <img src="{{ url_for('static', filename='images/waterpark.jpg') }}" alt="">
-      <img src="{{ url_for('static', filename='images/wifi.jpg') }}" alt="">
+  <section class="attractions" id="attraction">
+    <h2>Nearby Attractions</h2>
+    <div class="attractions-grid">
+      <div class="attraction-card">
+        <div class="attraction-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 01-.659 1.591l-5.432 5.432a2.25 2.25 0 00-.659 1.591v2.927a2.25 2.25 0 01-1.244 2.013L9.75 21v-6.572a2.25 2.25 0 00-.659-1.591L3.659 7.409A2.25 2.25 0 013 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0112 3z" /></svg>
+        </div>
+        <h3>Beach Walkway</h3>
+        <p class="distance">1 km away</p>
+      </div>
+      <div class="attraction-card">
+        <div class="attraction-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0012 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75z" /></svg>
+        </div>
+        <h3>City Museum</h3>
+        <p class="distance">2 km away</p>
+      </div>
+      <div class="attraction-card">
+        <div class="attraction-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.658-.463 1.243-1.117 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.117 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" /></svg>
+        </div>
+        <h3>Shopping Plaza</h3>
+        <p class="distance">500 m away</p>
+      </div>
     </div>
   </section>
-
-  <!-- Footer -->
+  
+  <section class="perks">
+    <h2>Our Perks</h2>
+    <div class="perks-grid">
+      <div class="perk-card">
+        <div class="perk-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 9.75h7.5v7.5h-7.5z" /><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15.91 15.91L19.5 19.5M4.5 4.5l3.59 3.59" /></svg>
+        </div>
+        <h3>24/7 Room Service</h3>
+      </div>
+      <div class="perk-card">
+        <div class="perk-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12.75 19.5v-.75a7.5 7.5 0 00-7.5-7.5H4.5m0-6.75h.75c7.5 0 13.5 6 13.5 13.5v.75" /><path stroke-linecap="round" stroke-linejoin="round" d="M6 5.25a2.25 2.25 0 012.25-2.25h3a2.25 2.25 0 012.25 2.25v3a2.25 2.25 0 01-2.25 2.25h-3a2.25 2.25 0 01-2.25-2.25v-3z" /></svg>
+        </div>
+        <h3>Free High-Speed Wi-Fi</h3>
+      </div>
+      <div class="perk-card">
+        <div class="perk-icon">
+           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 9V4.5M9 9H4.5M9 9L3.75 3.75M9 15v4.5M9 15H4.5M9 15l-5.25 5.25M15 9h4.5M15 9V4.5M15 9l5.25-5.25M15 15h4.5M15 15v4.5M15 15l5.25 5.25" /></svg>
+        </div>
+        <h3>Pool & Waterpark Access</h3>
+      </div>
+       <div class="perk-card">
+        <div class="perk-icon">
+           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12c0-5.25-4.25-9.5-9.5-9.5S.5 6.75.5 12s4.25 9.5 9.5 9.5 9.5-4.25 9.5-9.5z" /><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12c0-5.25-4.25-9.5-9.5-9.5S.5 6.75.5 12s4.25 9.5 9.5 9.5 9.5-4.25 9.5-9.5z" /><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12c0-5.25-4.25-9.5-9.5-9.5S.5 6.75.5 12s4.25 9.5 9.5 9.5 9.5-4.25 9.5-9.5z" /><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12c0-5.25-4.25-9.5-9.5-9.5S.5 6.75.5 12s4.25 9.5 9.5 9.5 9.5-4.25 9.5-9.5z" /></svg>
+        </div>
+        <h3>Surfing Lessons</h3>
+      </div>
+    </div>
+  </section>
+  
   <footer>
     <p>© 2025 Mount n' Mist. All Rights Reserved.</p>
   </footer>
 
 </body>
 </html>
+

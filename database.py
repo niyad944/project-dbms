@@ -176,7 +176,7 @@ def book_room(guest_id, room_type_id, check_in, check_out):
 
     if not available_room:
         conn.close()
-        return "❌ No rooms of this type available for the given dates."
+        return "❌ No rooms of this type available for the given dates.",-1
 
     room_id_to_book = available_room[0]
 
@@ -277,6 +277,34 @@ def cancel_pending_booking(booking_id):
     conn.commit()
     conn.close()
     return "Your booking has been cancelled."
+
+def get_booking_history_for_guest(guest_id):
+    """
+    Fetches a detailed list of all bookings for a specific guest,
+    joining with Billings and RoomTypes to get all necessary info.
+    """
+    conn = sqlite3.connect("hotel_management.db")
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+    
+    # This SQL query joins multiple tables to get a comprehensive view of each booking.
+    cursor.execute("""
+        SELECT
+            RT.RoomType,
+            B.CheckInDate,
+            B.CheckOutDate,
+            BL.PaymentStatus
+        FROM Bookings AS B
+        JOIN Billings AS BL ON B.BookingID = BL.BookingID
+        JOIN Rooms AS R ON B.RoomID = R.RoomID
+        JOIN RoomTypes AS RT ON R.RoomTypeID = RT.RoomTypeID
+        WHERE B.GuestID = ?
+        ORDER BY B.CheckInDate DESC
+    """, (guest_id,))
+    
+    bookings = cursor.fetchall()
+    conn.close()
+    return bookings
 
 
 if __name__ == "__main__":

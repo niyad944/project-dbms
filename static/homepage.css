@@ -1,160 +1,131 @@
-/* static/homepage.css */
+    /* --- General Styles (from homepage.css) --- */
+    body { font-family: sans-serif; margin: 0; background-color: #fff; }
+    .header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem; background-color: white; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+    .logo { font-size: 1.5rem; font-weight: bold; }
+    .nav a { margin-left: 1.5rem; text-decoration: none; color: #333; }
+    .hero { display: flex; align-items: center; padding: 2rem; background-color: #f4f7f6; }
+    .hero-content { flex: 1; }
+    .hero-content h1 { font-size: 4rem; }
+    .hero-img img { max-width: 100%; border-radius: 8px; }
+    .rooms { padding: 4rem 2rem; text-align: center; }
+    .rooms h2 { font-size: 2.25rem; margin-bottom: 2rem; }
+    .room-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+    .room-tile { background-color: white; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); overflow: hidden; text-align: left; }
+    .room-tile img { width: 100%; height: 200px; object-fit: cover; }
+    .room-tile h3 { font-size: 1.5rem; margin: 1rem 1.5rem 0.5rem; }
+    .room-tile p { margin: 0 1.5rem 1rem; color: #666; }
+    .room-tile button { display: block; width: calc(100% - 3rem); margin: 0 1.5rem 1.5rem; padding: 0.75rem; background-color: #4f46e5; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
+    footer { text-align: center; padding: 2rem; background-color: #333; color: white; }
 
-/* General Reset */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: "Segoe UI", Arial, sans-serif;
-}
+    /* --- ✨ NEW: Hover effect for Room Tiles ✨ --- */
+    .room-tile {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .room-tile:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+    }
 
-body {
-    color: #333;
-    background: #fafafa;
-}
+    /* --- Styles for Attractions Section --- */
+    .attractions {
+      background-color: #f9fafb;
+      padding: 4rem 1rem;
+      text-align: center;
+    }
+    .attractions h2, .perks h2 {
+      font-size: 2.25rem;
+      font-weight: bold;
+      color: #111827;
+      margin-bottom: 2.5rem;
+    }
+    .attractions-grid, .perks-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      max-width: 4xl;
+      margin: 0 auto;
+    }
+    .attraction-card, .perk-card {
+      background-color: white;
+      border-radius: 0.75rem;
+      padding: 2rem;
+      text-align: center;
+      box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .attraction-card:hover, .perk-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.1);
+    }
+    .attraction-icon svg, .perk-icon svg {
+      width: 3rem;
+      height: 3rem;
+      margin: 0 auto 1rem;
+      stroke: #4f46e5;
+      stroke-width: 1.5;
+    }
+    .attraction-card h3, .perk-card h3 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #1f2937;
+    }
+    .attraction-card .distance {
+      font-size: 0.9rem;
+      color: #6b7280;
+      margin-top: 0.25rem;
+    }
+    
+    /* --- Styles for old Gallery section (now Perks) --- */
+    .perks {
+      padding: 4rem 1rem; 
+      text-align: center;
+      background-color: white;
+    }
 
-/* Header */
-.header {
-    background: #2c3e50;
-    color: #fff;
-    padding: 15px 40px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-}
 
-.logo {
-    font-size: 1.8em;
-    font-weight: bold;
-}
+        .booking-history-table {
+        width: 100%;
+        max-width: 800px; 
+        margin: 0 auto; 
+        border-collapse: collapse; 
+        background-color: white;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        border-radius: 8px;
+        overflow: hidden; 
+    }
+    .booking-history-table th, .booking-history-table td {
+        padding: 1rem;
+        text-align: left;
+        border-bottom: 1px solid #e5e7eb; 
+    }
+    .booking-history-table th {
+        background-color: #f9fafb; 
+        font-weight: 600;
+        color: #374151;
+    }
+    .status {
+        padding: 0.25rem 0.75rem;
+        border-radius: 9999px;
+        font-weight: 600;
+        font-size: 0.8rem;
+    }
+    .status-paid {
+        background-color: #dcfce7; 
+        color: #166534; 
+    }
+    .status-pending {
+        background-color: #ffedd5;
+        color: #9a3412;
+    }
+    .no-bookings {
+        text-align: center;
+        padding: 2rem;
+        background-color: #f9fafb;
+        border-radius: 8px;
+        color: #6b7280;
+    }
 
-.nav a {
-    margin-left: 20px;
-    text-decoration: none;
-    color: #fff;
-    font-weight: 500;
-}
-
-.nav a:hover {
-    color: #f1c40f;
-}
-
-/* Hero Section */
-.hero {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 50px 40px;
-    background: #fff;
-}
-
-.hero-content {
-    max-width: 50%;
-}
-
-.hero-content h1 {
-    font-size: 2.8em;
-    margin-bottom: 15px;
-}
-
-.hero-content p {
-    font-size: 1.2em;
-    color: #555;
-}
-
-.hero-img img {
-    max-width: 500px;
-    border-radius: 10px;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-}
-
-/* Rooms Section */
-.rooms {
-    padding: 50px 20px;
-    text-align: center;
-    background: #f9f9f9;
-}
-
-.room-grid {
-    display: flex;
-    justify-content: center;
-    gap: 30px;
-    margin-top: 25px;
-    flex-wrap: wrap;
-}
-
-.room-tile {
-    background: #fff;
-    width: 300px;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.room-tile img {
-    width: 100%;
-    border-radius: 8px;
-    margin-bottom: 12px;
-}
-
-.room-tile h3 {
-    margin-bottom: 8px;
-    color: #2c3e50;
-}
-
-.room-tile button {
-    margin-top: 15px;
-    padding: 10px 20px;
-    border: none;
-    background: #f1c40f;
-    color: #2c3e50;
-    font-weight: bold;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-/* Attractions Section */
-.attractions {
-    padding: 50px 20px;
-    background: #ecf0f1;
-    text-align: center;
-}
-
-.attractions ul {
-    list-style: none;
-    margin-top: 15px;
-    line-height: 1.8;
-}
-
-/* Gallery Section */
-.gallery {
-    padding: 50px 20px;
-    text-align: center;
-}
-
-.gallery-grid {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 15px;
-    margin-top: 20px;
-}
-
-.gallery-grid img {
-    width: 250px;
-    height: 180px;
-    object-fit: cover;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* Footer */
-footer {
-    background: #2c3e50;
-    color: #fff;
-    text-align: center;
-    padding: 20px;
-}
+    .history-heading{
+        text-align: center;
+        font-size: 36px;
+    }
