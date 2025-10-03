@@ -78,7 +78,7 @@ def insertvalues():
         "Standard Room",
         "A cozy and practical stay option with essential amenities for a comfortable visit.",
         "The Standard Room offers all the essentials in a well-designed space. Perfect for short stays, featuring a double bed, functional furniture, and a clean, modern bathroom.",
-        3500,                        # example price
+        3500,                        
         2,
         "Double Bed",
         300,
@@ -121,9 +121,9 @@ def insertvalues():
     ))
 
     rooms_data = [
-        ('101', 1), ('102', 1), ('103', 1), # Three Standard Rooms
-        ('201', 2), ('202', 2),             # Two Deluxe Rooms
-        ('301', 3)                          # One Luxury Suite
+        ('101', 1), ('102', 1), ('103', 1), 
+        ('201', 2), ('202', 2),             
+        ('301', 3)                          
     ]
     cursor.executemany("INSERT INTO Rooms (RoomNumber, RoomTypeID) VALUES (?, ?)", rooms_data)
 
@@ -163,7 +163,7 @@ def book_room(guest_id, room_type_id, check_in, check_out):
     conn = sqlite3.connect("hotel_management.db")
     cursor = conn.cursor()
 
-    # Find available rooms of the requested type
+    
     cursor.execute("""
         SELECT R.RoomID FROM Rooms R
         WHERE R.RoomTypeID = ? AND R.RoomID NOT IN (
@@ -176,34 +176,34 @@ def book_room(guest_id, room_type_id, check_in, check_out):
 
     if not available_room:
         conn.close()
-        return "❌ No rooms of this type available for the given dates.",-1
+        return " No rooms of this type available for the given dates.",-1
 
     room_id_to_book = available_room[0]
 
-    # Insert booking
+    
     cursor.execute("""
         INSERT INTO Bookings (GuestID, RoomID, CheckInDate, CheckOutDate)
         VALUES (?, ?, ?, ?)
     """, (guest_id, room_id_to_book, check_in, check_out))
     booking_id = cursor.lastrowid
 
-    # Calculate total bill
+    
     cursor.execute("SELECT RatePerNight FROM RoomTypes WHERE RoomTypeID = ?", (room_type_id,))
     rate = cursor.fetchone()[0]
     cursor.execute("SELECT julianday(?) - julianday(?)", (check_out, check_in))
     nights = int(cursor.fetchone()[0])
     total_amount = rate * nights
 
-    # Insert billing record
+    
     cursor.execute("""
         INSERT INTO Billings (BookingID, TotalAmount, PaymentStatus)
         VALUES (?, ?, 'Pending')
     """, (booking_id, total_amount))
-    billing_id = cursor.lastrowid # Get the ID of the new bill
+    billing_id = cursor.lastrowid 
 
     conn.commit()
     conn.close()
-    return "✅ Booking initiated. Please confirm payment.", billing_id
+    return " Booking initiated. Please confirm payment.", billing_id
 
 def get_room_details(room_type_id):
     """Fetches details for a specific room type."""
@@ -215,14 +215,14 @@ def get_room_details(room_type_id):
     conn.close()
     return room
 
-# --- ✨ NEW FUNCTION #1: Gathers data for an existing pending booking ✨ ---
+
 def get_pending_booking_details(billing_id):
     """Fetches all details for a specific pending bill to display on the payment page."""
     conn = sqlite3.connect("hotel_management.db")
     conn.row_factory = sqlite3.Row
     cursor = conn.cursor()
     
-    # This query joins all necessary tables to build a complete summary
+    
     cursor.execute("""
         SELECT
             RT.RoomType, RT.RoomTypeID,
@@ -241,7 +241,7 @@ def get_pending_booking_details(billing_id):
     if not details:
         return None
 
-    # Calculate nights to display on the summary page
+    
     conn = sqlite3.connect("hotel_management.db")
     cursor = conn.cursor()
     cursor.execute("SELECT julianday(?) - julianday(?)", (details['CheckOutDate'], details['CheckInDate']))
@@ -254,11 +254,11 @@ def get_pending_booking_details(billing_id):
         "check_out": details["CheckOutDate"],
         "nights": nights,
         "total_amount": details["TotalAmount"],
-        "booking_id": details["BookingID"], # Pass this for the cancel button
-        "billing_id": billing_id # Pass this for the pay button
+        "booking_id": details["BookingID"], 
+        "billing_id": billing_id 
     }
 
-# --- ✨ NEW FUNCTION #2: Updates a bill's status to 'Paid' ✨ ---
+
 def update_bill_to_paid(billing_id):
     """Updates a bill's status from 'Pending' to 'Paid'."""
     conn = sqlite3.connect("hotel_management.db")
@@ -268,7 +268,7 @@ def update_bill_to_paid(billing_id):
     conn.close()
     return "✅ Payment successful! Your booking is confirmed."
 
-# --- ✨ NEW FUNCTION #3: Deletes a pending booking ✨ ---
+
 def cancel_pending_booking(booking_id):
     """Deletes a booking. The CASCADE rule will also delete the associated bill."""
     conn = sqlite3.connect("hotel_management.db")
@@ -287,7 +287,7 @@ def get_booking_history_for_guest(guest_id):
     conn.row_factory = sqlite3.Row
     cursor = conn.cursor()
     
-    # This SQL query joins multiple tables to get a comprehensive view of each booking.
+    
     cursor.execute("""
         SELECT
             RT.RoomType,
@@ -316,13 +316,13 @@ def cancel_booking_by_guest(booking_id, guest_id):
     conn = sqlite3.connect("hotel_management.db")
     cursor = conn.cursor()
     
-    # The WHERE clause checks both IDs for security
+    
     cursor.execute("""
         DELETE FROM Bookings
         WHERE BookingID = ? AND GuestID = ?
     """, (booking_id, guest_id))
     
-    # We can check if a row was actually deleted
+    
     rows_deleted = cursor.rowcount
     
     conn.commit()

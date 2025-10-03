@@ -50,7 +50,7 @@ def homepage():
     cursor = conn.cursor()
     cursor.execute("SELECT Name FROM Guests WHERE Email = ?", (useremail,))
     
-    # fetchone() gets the first result
+    
     username = cursor.fetchone()
     for i in username:
         username=i
@@ -135,7 +135,7 @@ def cancel_booking():
     booking_id_to_cancel = request.form.get('booking_id')
     guest_id = session['user_id']
     
-    # Call the new, secure database function
+    
     message = cancel_booking_by_guest(booking_id_to_cancel, guest_id)
     print(message)
     return redirect(url_for('homepage'))

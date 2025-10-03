@@ -76,16 +76,12 @@
 
           </div>
         </div>
-
-        <!-- FORM  -->
-
-        
       </section>
-      
     </main>
+    
     <div >
         <form action="{{ url_for('book') }}" method="POST" class="booking-form">
-          <!-- Hidden input to pass the room_type_id to the backend -->
+          
           <input type="hidden" name="room_type_id" value="{{ room.RoomTypeID }}">
           
           <div class="date-inputs">
