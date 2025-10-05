@@ -1,4 +1,4 @@
-#Mount n' Mist - Full Stack Hotel Booking Web Application
+# Mount n' Mist - Full Stack Hotel Booking Web Application
 A complete, database-driven web application that simulates a real-world hotel booking system. Built with Python and Flask, this project allows users to sign up, log in, browse rooms, book a stay, and manage their booking history.
 
 ##Project Overview
