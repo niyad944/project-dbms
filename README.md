@@ -1,4 +1,5 @@
 # Mount n' Mist - Full Stack Hotel Booking Web Application
+
 A complete, database-driven web application that simulates a real-world hotel booking system. Built with Python and Flask, this project allows users to sign up, log in, browse rooms, book a stay, and manage their booking history.
 
 ## Project Overview
@@ -32,43 +33,49 @@ Deployment: PythonAnywhere
 To run this project on your own machine, follow these steps:
 
 1. Clone the Repository:
-
+```
 git clone [https://github.com/your-username/mount-n-mist.git](https://github.com/your-username/mount-n-mist.git)
 cd mount-n-mist
+```
 
-2. Create and Activate a Virtual Environment:
-This isolates the project's dependencies.
-
+3. Create and Activate a Virtual Environment:
+4. 
 ### For Windows
+```
 python -m venv env
 .\env\Scripts\activate
-
+```
 ### For macOS/Linux
+```
 python3 -m venv env
 source env/bin/activate
+```
 
 3. Install Dependencies:
-The requirements.txt file contains all the necessary packages.
-
+```
 pip install -r requirements.txt
+```
 
 4. Set Up the Database (One-Time Task):
-Run the setup script to create the hotel_management.db file and populate it with initial data.
-
-python setup_database.py
+```
+python database.py
+```
 
 5. Run the Flask Application:
-
+```
 flask run
+```
 
 The application will be available at http://127.0.0.1:5000.
 
 ## Deployment
+
 This application is deployed and live on PythonAnywhere. The platform's persistent filesystem is ideal for hosting applications with an SQLite database, as it prevents data loss on server restarts.
 
 Live URL: http://your-username.pythonanywhere.com
 
 ## Project Structure
+```
 /mount-n-mist
 ├── app.py                  # Main Flask application (routes and logic)
 ├── database.py             # All functions for database interaction
@@ -82,3 +89,4 @@ Live URL: http://your-username.pythonanywhere.com
     ├── login.html
     ├── room.html
     └── ...
+```
