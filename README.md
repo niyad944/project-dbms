@@ -1,10 +1,10 @@
 # Mount n' Mist - Full Stack Hotel Booking Web Application
 A complete, database-driven web application that simulates a real-world hotel booking system. Built with Python and Flask, this project allows users to sign up, log in, browse rooms, book a stay, and manage their booking history.
 
-##Project Overview
+## Project Overview
 Mount n' Mist is a demonstration of a full-stack web application. It provides a seamless user experience from authentication to booking confirmation. The backend is powered by Flask, handling all the business logic and database interactions, while the frontend uses clean HTML and CSS to create a modern, responsive user interface. The project manages rooms, user accounts, bookings, and billing through a relational SQLite database.
 
-##Key Features
+## Key Features
 User Authentication: Secure user registration and login system with session management to handle user state.
 
 Room Browsing: Users can view detailed pages for different room types available at the hotel.
@@ -19,7 +19,7 @@ Secure Cancellation: Users can cancel their own bookings directly from their his
 
 Relational Database: A well-structured SQLite database with cascading rules to ensure data integrity (e.g., canceling a booking automatically removes the associated bill).
 
-##Tech Stack
+## Tech Stack
 Backend: Python 3, Flask
 
 Database: SQLite 3
@@ -28,7 +28,7 @@ Frontend: HTML5, CSS3
 
 Deployment: PythonAnywhere
 
-##Running the Project Locally
+## Running the Project Locally
 To run this project on your own machine, follow these steps:
 
 1. Clone the Repository:
@@ -39,11 +39,11 @@ cd mount-n-mist
 2. Create and Activate a Virtual Environment:
 This isolates the project's dependencies.
 
-###For Windows
+### For Windows
 python -m venv env
 .\env\Scripts\activate
 
-###For macOS/Linux
+### For macOS/Linux
 python3 -m venv env
 source env/bin/activate
 
@@ -63,7 +63,7 @@ flask run
 
 The application will be available at http://127.0.0.1:5000.
 
-##Deployment
+## Deployment
 This application is deployed and live on PythonAnywhere. The platform's persistent filesystem is ideal for hosting applications with an SQLite database, as it prevents data loss on server restarts.
 
 Live URL: http://your-username.pythonanywhere.com
