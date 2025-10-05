@@ -68,7 +68,7 @@ This application is deployed and live on PythonAnywhere. The platform's persiste
 
 Live URL: http://your-username.pythonanywhere.com
 
-📁 Project Structure
+## Project Structure
 /mount-n-mist
 ├── app.py                  # Main Flask application (routes and logic)
 ├── database.py             # All functions for database interaction
